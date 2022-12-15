@@ -15,32 +15,47 @@ var quizBtn = document.querySelector(".begin");
 var timerEl = document.querySelector (".timer");
 
 var quizObject = {
-    q1: "Am I a cat?",
-    q2: "what is cat?",
-    q3: "do you eat fish",
-    q4: "sample question 4",
-}
+    question: "Am I a cat?",
+    a1: "wrong",
+    a2: "wrong",
+    a3: "correct",
+    a4: " wrong"
+};
 
 console.log(timerEl)
 // create a quiz function
+function endQuiz (){
+//  replaces game-arena with score arena.
+// inside score arena, append a form to the html and store its values in local storage 
+
+};
 
 function bestQuiz() {
-    console.log("hello")
+    console.log("hello");
     // create a timer function
-    var timeRemaining = 30;
+    var timeRemaining = 3;
+    score = 0
 
     var timer = setInterval(function () {
         timeRemaining--;
-        timerEl.textContent = timeRemaining + "seconds left"
+        timerEl.textContent = timeRemaining + "seconds left";
+        if (timeRemaining=== 0){
+            console.log(score)
+            return score;
+        }
     
     },1000)
     
+    // for loop for quiz object array. For every question (quiz object)  grab EACH answer  and append its value to the HTML in a random order. 
+    // the correct answer key will listen for a click that will add to the score counter... 
+    // the wrong answer key will subtract valued from timer element or increase the rate of countdown?
 
-}
-// quiz function  contains  a set of questions
+
+};
+// quiz function  contains  an arrayu  of question objects
 // quiz needs a time interval countdown
-//  The next question (item in questions object) is an event that occurs when ANY answer is selected
-// Questions object asks questions in a random order
+//  The next question (item in questions object) is an triggered by an event listenerfor when ANY answer is selected
+// 
 // clicking the correct question  adds 1 to a count variable measuring correct answers
 
 
@@ -50,8 +65,7 @@ function bestQuiz() {
 
 
 
-// when quiz is complete, score is logged to local storage
-// 
+ 
 
 
 // add an event listener for button click event to start quiz
