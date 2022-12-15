@@ -11,14 +11,32 @@
 // THEN I can save my initials and my score
 
 
-var beginQuiz = document.querySelector(".begin")
-console.log(beginQuiz)
+var quizBtn = document.querySelector(".begin");
+var timerEl = document.querySelector (".timer");
+
+var quizObject = {
+    q1: "Am I a cat?",
+    q2: "what is cat?",
+    q3: "do you eat fish",
+    q4: "sample question 4",
+}
+
+console.log(timerEl)
 // create a quiz function
 
- function bestQuiz() {
+function bestQuiz() {
+    console.log("hello")
+    // create a timer function
+    var timeRemaining = 30;
 
+    var timer = setInterval(function () {
+        timeRemaining--;
+        timerEl.textContent = timeRemaining + "seconds left"
+    
+    },1000)
+    
 
- }
+}
 // quiz function  contains  a set of questions
 // quiz needs a time interval countdown
 //  The next question (item in questions object) is an event that occurs when ANY answer is selected
@@ -37,3 +55,4 @@ console.log(beginQuiz)
 
 
 // add an event listener for button click event to start quiz
+quizBtn.addEventListener("click", bestQuiz)
