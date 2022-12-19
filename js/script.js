@@ -1,9 +1,11 @@
 
 // WHEN the game is over
 // THEN I can save my initials and my score
+// bug, scores do not persist
+// score saving bug in gneral
 
 // create all Global variables
-var timeRemaining = 100;
+var timeRemaining = 60;
 var score = 0;
 var quizBtn = document.querySelector(".begin");
 var timerEl = document.querySelector(".timer");
@@ -12,6 +14,11 @@ var timer;
 var index = 0;
 var userInitials;
 var storedScore;
+var storedScores = [];
+var initials;
+var scoreList;
+var scoreboard;
+
 
 
 // created HTML elements to be appended in later function
@@ -67,35 +74,58 @@ function endQuiz() {
     //  replaces game-arena with score arena.
     // inside score arena, append a form to the html and store its values in local storage 
     clearInterval(timer)
-    console.log("we made it to the end")
-    gameArena.removeChild(scoreEl, questionAsked, answerList)
-    var scoreboard = document.createElement("div");
+    gameArena.removeChild(scoreEl);
+    replaceGameArena();
+
+    initials = document.createElement("input");
+    initials.textContent= "Name or Initials here"
+    gameArena.appendChild(initials);
+    initials.setAttribute("class", "initials");
+    document.querySelector(".initials").addEventListener("keyup", addToStorage);
+
+
+};
+function showHighScores() {
+    scoreboard = document.createElement("div");
     scoreboard.setAttribute("class", "scoreboard");
     scoreboard.textContent = "You got " + score + " answers correct ";
     timerEl.textContent = "you had " + timeRemaining + " seconds left!";
     gameArena.appendChild(scoreboard);
-    var initials =  document.createElement("input");
-    gameArena.appendChild(initials)
-    initials.setAttribute("class", "initials")
-    document.querySelector(".initials").addEventListener("keyup", function (evt) {
-        
-        if(evt.key === "Enter"){
-            userInitials=localStorage.setItem("initials",JSON.stringify(initials.value));
-            storedScore = {
-                UI : userInitials,
-                score: score,
-                timerRemaining: timeRemaining,
-            }   
+    scoreList = document.createElement("ul")
+    scoreboard.appendChild(scoreList)
+    scoreList.setAttribute("Class", "scoreboard")
+    var highScores =document.querySelector(".scoreboard")
+    for (i = 0; i < storedScores.length; i++) {
+        console.log(storedScores)
+        var highScore =document.createElement("li")
+        highScore.setAttribute("class", "score")
+        highScore.textContent = "PLAYER: " +storedScores[i].userInitials + "  Scored:" + storedScores[i].score + " in " + storedScores[i].timeRemaining +" seconds!";
+        highScores.appendChild(highScore) 
     }
-        console.log(storedScore)    
-        })
+}
+function addToStorage(evt) {
+    {
 
-   
-    var storedScores = []
-   
+        if (evt.key === "Enter") {
+            userInitials = initials.value;
 
+            storedScore = {
+                userInitials: userInitials,
+                score: score,
+                timeRemaining: timeRemaining,
 
-};
+            }
+            storedScores = JSON.parse(localStorage.getItem("storedScores"));
+            if (storedScores === null) {
+                storedScores = []
+            }
+            storedScores.push(storedScore);
+            localStorage.setItem("storedScores", JSON.stringify(storedScores));
+            showHighScores()
+
+        }
+    }
+}
 // create a timer functionality
 function countdown() {
 
@@ -103,7 +133,7 @@ function countdown() {
         timeRemaining--;
         timerEl.textContent = timeRemaining + " seconds left";
         if (timeRemaining <= 0) {
-            clearInterval(timer);
+
             endQuiz();
         }
 
@@ -117,7 +147,7 @@ function replaceGameArena() {
 // function to take in a quiz obiect from the array and  append all values to HTML based on the values key.
 function increaseScore() {
     score += 1;
-    gameArena.appendChild(scoreEl);
+
     scoreEl.textContent = score + " correct answers";
     nextQuestion();
 }
@@ -127,10 +157,14 @@ function decreaseTime() {
 }
 function nextQuestion() {
     index++;
-    replaceGameArena();
-    mainQuizFunction();
+    if (index > 4) {
+        endQuiz();
+    } else {
+        replaceGameArena();
+        mainQuizFunction();
+    }
 }
-// the Shuffler function is a basic shuffling algorithm based on Fisher Yates shuffle. replacing one item in an array with a random item and looping through
+// the Shuffler function is a basic shuffling algorithm based on Fisher Yates shuffle. replacing one item in an array with a random item and looping through 
 function shuffler(answerArray) {
     var m = answerArray.length, t, i;
 
@@ -149,55 +183,64 @@ function shuffler(answerArray) {
     return answerArray;
 }
 function mainQuizFunction() {
+    gameArena.appendChild(scoreEl);
     var quizObiect = quizObiects[index];
     console.log(quizObiect);
-    if (index >= 5 || timeRemaining === 0) {
-        endQuiz();
-    } else {
-
-        // give  elements content and set the class attribute. Create an array of all the answers and append them to the HTML in random order.
-
-        var answerArray = [correctAnswer, otherAnswer1, otherAnswer2, otherAnswer3];
-
-        questionAsked.textContent = quizObiect.question;
-        questionAsked.setAttribute("class", "question");
-        gameArena.appendChild(questionAsked);
-
-        answerList.setAttribute("class", "answer-list");
-        gameArena.appendChild(answerList);
-
-        correctAnswer.textContent = quizObiect.correct;
-        correctAnswer.setAttribute("class", "correct");
-
-        otherAnswer1.textContent = quizObiect.a2;
-        otherAnswer1.setAttribute("class", "incorrect");
-
-        otherAnswer2.textContent = quizObiect.a3;
-        otherAnswer2.setAttribute("class", "incorrect");
-
-        otherAnswer3.textContent = quizObiect.a4;
-        otherAnswer3.setAttribute("class", "incorrect");
-
-        shuffler(answerArray);
-        for (i = 0; i < answerArray.length; i++) {
-            answerList.appendChild(answerArray[i]);
-        }
-        // create an event listener for correct answers and incorrect answers.  Use a for loop to give the event listener to each list 
-        // element in the array created by querySelectorAll()
-        var incorrectClicked = document.querySelectorAll(".incorrect");
-        var correctClicked = document.querySelector(".correct");
-
-        correctClicked.addEventListener("click", increaseScore);
-
-        for (i = 0; i < incorrectClicked.length; i++) {
-            incorrectClicked[i].addEventListener("click", decreaseTime);
 
 
-        }
+    // give  elements content and set the class attribute. Create an array of all the answers and append them to the HTML in random order.
+
+    var answerArray = [correctAnswer, otherAnswer1, otherAnswer2, otherAnswer3];
+
+    questionAsked.textContent = quizObiect.question;
+    questionAsked.setAttribute("class", "question");
+    gameArena.appendChild(questionAsked);
+
+    answerList.setAttribute("class", "answer-list");
+    gameArena.appendChild(answerList);
+
+    correctAnswer.textContent = quizObiect.correct;
+    correctAnswer.setAttribute("class", "correct");
+
+    otherAnswer1.textContent = quizObiect.a2;
+    otherAnswer1.setAttribute("class", "incorrect");
+
+    otherAnswer2.textContent = quizObiect.a3;
+    otherAnswer2.setAttribute("class", "incorrect");
+
+    otherAnswer3.textContent = quizObiect.a4;
+    otherAnswer3.setAttribute("class", "incorrect");
+
+    shuffler(answerArray);
+    for (i = 0; i < answerArray.length; i++) {
+        answerList.appendChild(answerArray[i]);
     }
+    // create an event listener for correct answers and incorrect answers.  Use a for loop to give the event listener to each list 
+    // element in the array created by querySelectorAll()
+    var incorrectClicked = document.querySelectorAll(".incorrect");
+    var correctClicked = document.querySelector(".correct");
+
+    correctClicked.addEventListener("click", increaseScore);
+
+    for (i = 0; i < incorrectClicked.length; i++) {
+        incorrectClicked[i].addEventListener("click", decreaseTime);
+
+
+    }
+
 }
 
+// 
+
 function worldsBestQuiz() {
+    if(index >4 ){
+        gameArena.removeChild(scoreboard)
+        gameArena.removeChild(initials)
+        gameArena.removeChild(timerEl)
+        index = 0
+        score = 0
+
+    }
     countdown();
     mainQuizFunction();
 };

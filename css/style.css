@@ -1,1 +1,48 @@
-h1 { font-size: 4rem;}
+*{
+    box-sizing: border-box;
+}
+h1 { font-size: 1.3rem;
+    text-align: center;
+}
+main {
+    background:linear-gradient(0deg, rgb(42, 63, 83) 0%, rgb(112, 194, 235) 63%);
+    width: 50%;
+    margin:auto;
+}
+.game-area{
+    display: flex;
+    justify-content: space-between;
+    width:75%;
+    margin:auto;
+    background-color: blueviolet;
+    
+}
+.answer-list{
+    display: flex;
+    background-color: aquamarine;
+
+}
+button{
+    margin-left: 45%;
+    
+}
+.timer{
+   background-color: rgb(192, 109, 109);
+
+}
+.scoreboard {
+    display:block;
+    
+    width:100%;
+
+    
+}
+.answer-list li {
+    display:block;
+    width: 49%;
+    border: solid;
+
+}
+.scoreboard li {
+    display: block
+}
