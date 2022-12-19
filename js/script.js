@@ -67,40 +67,38 @@ var quizObiects = [{
     a2: "Never make another quiz.",
     a3: "for (each question){let userBrain = mushier};",
     a4: "This quiz is IMPOSSIBLE."
-},];
+}];
 
 // create a quiz function
 function endQuiz() {
     //  replaces game-arena with score arena.
     // inside score arena, append a form to the html and store its values in local storage 
-    clearInterval(timer)
+    clearInterval(timer);
     gameArena.removeChild(scoreEl);
     replaceGameArena();
 
     initials = document.createElement("input");
-    initials.textContent= "Name or Initials here"
     gameArena.appendChild(initials);
     initials.setAttribute("class", "initials");
     document.querySelector(".initials").addEventListener("keyup", addToStorage);
+}
 
-
-};
 function showHighScores() {
     scoreboard = document.createElement("div");
     scoreboard.setAttribute("class", "scoreboard");
     scoreboard.textContent = "You got " + score + " answers correct ";
     timerEl.textContent = "you had " + timeRemaining + " seconds left!";
     gameArena.appendChild(scoreboard);
-    scoreList = document.createElement("ul")
-    scoreboard.appendChild(scoreList)
-    scoreList.setAttribute("Class", "scoreboard")
-    var highScores =document.querySelector(".scoreboard")
+    scoreList = document.createElement("ul");
+    scoreboard.appendChild(scoreList);
+    scoreList.setAttribute("Class", "scoreboard");
+    var highScores =document.querySelector(".scoreboard");
     for (i = 0; i < storedScores.length; i++) {
-        console.log(storedScores)
-        var highScore =document.createElement("li")
-        highScore.setAttribute("class", "score")
+        console.log(storedScores);
+        var highScore =document.createElement("li");
+        highScore.setAttribute("class", "score");
         highScore.textContent = "PLAYER: " +storedScores[i].userInitials + "  Scored:" + storedScores[i].score + " in " + storedScores[i].timeRemaining +" seconds!";
-        highScores.appendChild(highScore) 
+        highScores.appendChild(highScore); 
     }
 }
 function addToStorage(evt) {
@@ -117,11 +115,11 @@ function addToStorage(evt) {
             }
             storedScores = JSON.parse(localStorage.getItem("storedScores"));
             if (storedScores === null) {
-                storedScores = []
+                storedScores = [];
             }
             storedScores.push(storedScore);
             localStorage.setItem("storedScores", JSON.stringify(storedScores));
-            showHighScores()
+            showHighScores();
 
         }
     }
@@ -133,7 +131,6 @@ function countdown() {
         timeRemaining--;
         timerEl.textContent = timeRemaining + " seconds left";
         if (timeRemaining <= 0) {
-
             endQuiz();
         }
 
@@ -224,23 +221,20 @@ function mainQuizFunction() {
 
     for (i = 0; i < incorrectClicked.length; i++) {
         incorrectClicked[i].addEventListener("click", decreaseTime);
-
-
     }
-
 }
 
 // 
 
 function worldsBestQuiz() {
     if(index >4 ){
-        gameArena.removeChild(scoreboard)
-        gameArena.removeChild(initials)
-        gameArena.removeChild(timerEl)
-        index = 0
-        score = 0
-
+        gameArena.removeChild(scoreboard);
+        gameArena.removeChild(initials);
+        gameArena.removeChild(timerEl);
     }
+
+    index = 0;
+    score = 0;
     countdown();
     mainQuizFunction();
 };
