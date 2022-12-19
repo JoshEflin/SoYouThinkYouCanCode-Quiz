@@ -5,9 +5,21 @@ h1 { font-size: 1.3rem;
     text-align: center;
 }
 main {
-    background:linear-gradient(0deg, rgb(42, 63, 83) 0%, rgb(112, 194, 235) 63%);
+    background:linear-gradient(0deg, rgb(90, 131, 170) 0%, rgb(176, 224, 248) 33%);
     width: 50%;
     margin:auto;
+}
+li {
+    list-style: none
+}
+header {
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+button {
+    width:fit-content;
 }
 .game-area{
     display: flex;
@@ -18,13 +30,19 @@ main {
     
 }
 .answer-list{
+    padding: 0;
     display: flex;
-    background-color: aquamarine;
+    align-items: center;
+    margin:auto;
+    height:100%;
+    
 
 }
-button{
-    margin-left: 45%;
-    
+.hidden {
+    display:none;
+}
+.visible {
+    font-size: 2rem;
 }
 .timer{
    background-color: rgb(192, 109, 109);
@@ -32,16 +50,20 @@ button{
 }
 .scoreboard {
     display:block;
-    
     width:100%;
-
-    
 }
 .answer-list li {
-    display:block;
-    width: 49%;
+    flex-wrap: wrap;
+    width: 50%;
     border: solid;
-
+    border-radius: 1%;
+    margin:3px;
+    text-align: center;
+    height: 100%;
+    background-color: aquamarine;
+}
+input{
+    width:100%;
 }
 .scoreboard li {
     display: block

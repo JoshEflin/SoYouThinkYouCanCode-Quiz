@@ -1,9 +1,10 @@
 // create all Global variables
-var timeRemaining = 60;
+var timeRemaining; 
 var score = 0;
 var quizBtn = document.querySelector(".begin");
 var timerEl = document.querySelector(".timer");
 var gameArena = document.querySelector(".game-arena");
+var hiddenEl = document.querySelector(".hidden");
 var timer;
 var index = 0;
 var userInitials;
@@ -23,6 +24,7 @@ var otherAnswer1 = document.createElement("li");
 var otherAnswer2 = document.createElement("li");
 var otherAnswer3 = document.createElement("li");
 var scoreEl = document.createElement("p");
+
 
 // create an array of question-answer obiects
 var quizObiects = [{
@@ -65,8 +67,10 @@ var quizObiects = [{
 
 // create a function that ends the quiz
 function endQuiz() {
-    //  replaces game-arena with score arena.
-    // inside score arena, append a form to the html and store its values in local storage 
+    // replaces game-arena with score arena.
+    // inside score arena, append a form to the html and store its values in local storage
+    hiddenEl.setAttribute("class", "visible");
+    console.log(hiddenEl)
     clearInterval(timer);
     gameArena.removeChild(scoreEl);
     replaceGameArena();
@@ -121,7 +125,7 @@ function addToStorage(evt) {
 
 // create a timer functionality
 function countdown() {
-
+    timeRemaining = 60;
     timer = setInterval(function () {
         timeRemaining--;
         timerEl.textContent = timeRemaining + " seconds left";
@@ -214,14 +218,16 @@ function mainQuizFunction() {
 }
 
 function worldsBestQuiz() {
+    console.log(index)
     if (index > 4) {
         gameArena.removeChild(scoreboard);
         gameArena.removeChild(initials);
-        gameArena.removeChild(timerEl);
+        hiddenEl.setAttribute("class", "hidden");
     }
 
     index = 0;
-    score = 0;
+    scoreEl.textContent = "NEW QUIZ";
+    score =0 ;
     countdown();
     mainQuizFunction();
 };
