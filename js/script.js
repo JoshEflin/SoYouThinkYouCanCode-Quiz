@@ -1,9 +1,3 @@
-
-// WHEN the game is over
-// THEN I can save my initials and my score
-// bug, scores do not persist
-// score saving bug in gneral
-
 // create all Global variables
 var timeRemaining = 60;
 var score = 0;
@@ -69,20 +63,19 @@ var quizObiects = [{
     a4: "This quiz is IMPOSSIBLE."
 }];
 
-// create a quiz function
+// create a function that ends the quiz
 function endQuiz() {
     //  replaces game-arena with score arena.
     // inside score arena, append a form to the html and store its values in local storage 
     clearInterval(timer);
     gameArena.removeChild(scoreEl);
     replaceGameArena();
-
     initials = document.createElement("input");
     gameArena.appendChild(initials);
     initials.setAttribute("class", "initials");
     document.querySelector(".initials").addEventListener("keyup", addToStorage);
 }
-
+// creates a scoreboard inside the game arena, and appends a list of user score data
 function showHighScores() {
     scoreboard = document.createElement("div");
     scoreboard.setAttribute("class", "scoreboard");
@@ -92,15 +85,16 @@ function showHighScores() {
     scoreList = document.createElement("ul");
     scoreboard.appendChild(scoreList);
     scoreList.setAttribute("Class", "scoreboard");
-    var highScores =document.querySelector(".scoreboard");
+    var highScores = document.querySelector(".scoreboard");
     for (i = 0; i < storedScores.length; i++) {
         console.log(storedScores);
-        var highScore =document.createElement("li");
+        var highScore = document.createElement("li");
         highScore.setAttribute("class", "score");
-        highScore.textContent = "PLAYER: " +storedScores[i].userInitials + "  Scored:" + storedScores[i].score + " in " + storedScores[i].timeRemaining +" seconds!";
-        highScores.appendChild(highScore); 
+        highScore.textContent = "PLAYER: " + storedScores[i].userInitials + "  Scored:" + storedScores[i].score + " in " + storedScores[i].timeRemaining + " seconds!";
+        highScores.appendChild(highScore);
     }
 }
+// adds the current user's score to local storage, if there is already an item of the same name in local storage, it is appended.
 function addToStorage(evt) {
     {
 
@@ -124,6 +118,7 @@ function addToStorage(evt) {
         }
     }
 }
+
 // create a timer functionality
 function countdown() {
 
@@ -136,12 +131,12 @@ function countdown() {
 
     }, 1000);
 }
-
+// removes question and answers before adding the next round of questions and anwswers.
 function replaceGameArena() {
     gameArena.removeChild(questionAsked);
     gameArena.removeChild(answerList);
 }
-// function to take in a quiz obiect from the array and  append all values to HTML based on the values key.
+
 function increaseScore() {
     score += 1;
 
@@ -152,6 +147,7 @@ function decreaseTime() {
     timeRemaining -= 5;
     nextQuestion();
 }
+// makes sure there are questions left to ask before calling the functions that cycle to the next question
 function nextQuestion() {
     index++;
     if (index > 4) {
@@ -164,13 +160,10 @@ function nextQuestion() {
 // the Shuffler function is a basic shuffling algorithm based on Fisher Yates shuffle. replacing one item in an array with a random item and looping through 
 function shuffler(answerArray) {
     var m = answerArray.length, t, i;
-
     // While there remain elements to shuffle…
     while (m) {
-
         // Pick a remaining element…
         i = Math.floor(Math.random() * m--);
-
         // And swap it with the current element.
         t = answerArray[m];
         answerArray[m] = answerArray[i];
@@ -179,14 +172,11 @@ function shuffler(answerArray) {
 
     return answerArray;
 }
+// Grab a question and set of answers, append them to HTML. sets classes for all elements to be targetted by CSS.
 function mainQuizFunction() {
     gameArena.appendChild(scoreEl);
     var quizObiect = quizObiects[index];
-    console.log(quizObiect);
-
-
-    // give  elements content and set the class attribute. Create an array of all the answers and append them to the HTML in random order.
-
+    // Create an array of all the answers and append them to the HTML in random order.
     var answerArray = [correctAnswer, otherAnswer1, otherAnswer2, otherAnswer3];
 
     questionAsked.textContent = quizObiect.question;
@@ -212,8 +202,7 @@ function mainQuizFunction() {
     for (i = 0; i < answerArray.length; i++) {
         answerList.appendChild(answerArray[i]);
     }
-    // create an event listener for correct answers and incorrect answers.  Use a for loop to give the event listener to each list 
-    // element in the array created by querySelectorAll()
+    // Create event listeners on all the answers (note: this is not the best way to do this, should be using event delegation but I ran out of time)
     var incorrectClicked = document.querySelectorAll(".incorrect");
     var correctClicked = document.querySelector(".correct");
 
@@ -224,10 +213,8 @@ function mainQuizFunction() {
     }
 }
 
-// 
-
 function worldsBestQuiz() {
-    if(index >4 ){
+    if (index > 4) {
         gameArena.removeChild(scoreboard);
         gameArena.removeChild(initials);
         gameArena.removeChild(timerEl);
@@ -238,8 +225,5 @@ function worldsBestQuiz() {
     countdown();
     mainQuizFunction();
 };
-
 // add an event listener for button click event to start quiz
 quizBtn.addEventListener("click", worldsBestQuiz);
-
-
