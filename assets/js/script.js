@@ -1,3 +1,10 @@
+// current bugs
+// fix timer
+// fix cursor on text elements and psuedobuttons
+// change UI so its not terribly ugly
+
+
+
 // create all Global variables
 var timeRemaining; 
 var score = 0;
